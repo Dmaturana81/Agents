@@ -1,0 +1,8 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - 01_Databricks_text2sql.ipynb
+      - 02_DBs_classes.ipynb
+      - 03_planning_agent.ipynb
