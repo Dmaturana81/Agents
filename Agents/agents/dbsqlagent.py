@@ -569,6 +569,7 @@ def check_pandas(
     return {"python": code, "next": next, "error": code.error, "history": [HMessage(content=message)]}
 
 # %% ../../nbs/01_Databricks_text2sql.ipynb 57
+#| eval: false
 llm_model = "gpt-4o-mini"
 
 client = instructor.from_openai(
