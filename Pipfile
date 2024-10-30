@@ -15,8 +15,13 @@ unstructured = {extras = ["all-docs"], version = "*"}
 anthropic = "*"
 google-generativeai = "*"
 llamaai = "*"
+python-dotenv = "*"
+langchain-experimental = "*"
+plotly = "*"
+databricks-sql-connector = "*"
 
 [dev-packages]
+nbformat = "*"
 
 [requires]
 python_version = "3.12"

@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "Agents"
+  site-url: "https://Dmaturana81.github.io/Agents"
+  description: "Repository of Agents"
+  repo-branch: main
+  repo-url: "https://github.com/Dmaturana81/Agents"
