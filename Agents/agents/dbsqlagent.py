@@ -180,7 +180,7 @@ def get_tables_descriptions(
     return tables_description
 
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 26
+# %% ../../nbs/01_Databricks_text2sql.ipynb 25
 @classmethod
 @patch
 def row_2_str(
@@ -196,7 +196,7 @@ def row_2_str(
     return f"{row[0]} ( {row[1] if row[1] else ''} {row[2] if row[2] else ''})"
 
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 28
+# %% ../../nbs/01_Databricks_text2sql.ipynb 27
 @classmethod
 @patch
 def list_cols(
@@ -215,7 +215,7 @@ def list_cols(
 
 
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 31
+# %% ../../nbs/01_Databricks_text2sql.ipynb 30
 class GenieWarehouse(OpenAISchema):
     """Class with all information to connect and query the warehouse
     Args:
@@ -372,7 +372,7 @@ class GenieWarehouse(OpenAISchema):
             tables=tables,
         )
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 40
+# %% ../../nbs/01_Databricks_text2sql.ipynb 39
 class State(TypedDict):
     """Class that manage the state of the agent
     Args:
@@ -413,7 +413,7 @@ class State(TypedDict):
     ) # Error message if the code is not correct
     sql_write_passes: int = Field(0, description="Number of times the SQL query was written and passed.") # Number of times the SQL query was written and passed
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 43
+# %% ../../nbs/01_Databricks_text2sql.ipynb 42
 def get_tables(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the graph
@@ -428,7 +428,7 @@ def get_tables(
     message = f"The available tables are:\n{tables}"
     return {"history": [HMessage(content=message)]}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 46
+# %% ../../nbs/01_Databricks_text2sql.ipynb 45
 def describe_tables(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -443,7 +443,7 @@ def describe_tables(
     message = f"Below are the tables and its descrpition:\n{table_description}"
     return {"history": [HMessage(content=message)]}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 49
+# %% ../../nbs/01_Databricks_text2sql.ipynb 48
 def get_columns(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -458,7 +458,7 @@ def get_columns(
     message = f"The tables at they columns are:\n{columns}"
     return {"history": [HMessage(content=message)]}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 52
+# %% ../../nbs/01_Databricks_text2sql.ipynb 51
 def check_sql_query(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -490,7 +490,7 @@ def check_sql_query(
         next = 'write_sql_queries'
     return {"history": [HMessage(content=message)], "dataframe": df, "error": error, 'next':next, "sql_write_passes": state["sql_write_passes"] + 1}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 55
+# %% ../../nbs/01_Databricks_text2sql.ipynb 54
 class Pandas_code(OpenAISchema):
     """Class that represnts the code to generate graph in pandas"""
 
@@ -530,7 +530,7 @@ class Pandas_code(OpenAISchema):
     
 
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 60
+# %% ../../nbs/01_Databricks_text2sql.ipynb 59
 def check_pandas(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -553,7 +553,7 @@ def check_pandas(
         message = f"The code:{code}\n was wrong and returned the error:\n{e}\nTraceback:\n{error}"
     return {"python": code, "next": next, "error": code.error, "history": [HMessage(content=message)]}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 64
+# %% ../../nbs/01_Databricks_text2sql.ipynb 63
 #| eval: false
 llm_model = "gpt-4o-mini"
 
@@ -563,7 +563,7 @@ client = instructor.from_openai(
     ),
 )
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 66
+# %% ../../nbs/01_Databricks_text2sql.ipynb 65
 SQL_PREFIX = f"""You are an agent designed to interact with a SQL database from DataBricks.
 Given an input question, create a syntactically correct SQL query to run. Always use the tables and columns that are available in the database.
 As these is a database from scrapped information, the data is of varied formats, always try to use regular expressions or loosy matches.
@@ -578,7 +578,7 @@ Today is {datetime.date.today().strftime("%B %d, %Y")}.
 SQL_FUNCTIONS_SUFFIX = """I should look at the tables in the database to see what I can query.  Then I should query the schema of the most relevant tables."""
 
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 68
+# %% ../../nbs/01_Databricks_text2sql.ipynb 67
 ROUTER_PREFIX = """Think step by step and plan each step to gather the information required to succesfully answer the user's question.
 
 You have some tools to interact with the database:
@@ -591,7 +591,7 @@ You have some tools to interact with the database:
 When you have the information needed, answer the user using the tool 'final_answer'
 """
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 70
+# %% ../../nbs/01_Databricks_text2sql.ipynb 69
 class Router(OpenAISchema):
     """Class to route the messages"""
 
@@ -608,7 +608,7 @@ class Router(OpenAISchema):
         ],
     )
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 71
+# %% ../../nbs/01_Databricks_text2sql.ipynb 70
 def router(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -627,7 +627,7 @@ def router(
     print(data.next)
     return {"next": data.next}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 74
+# %% ../../nbs/01_Databricks_text2sql.ipynb 73
 class Code_interpreter(OpenAISchema):
     """Class that represnts the code interpreter strucuter"""
 
@@ -639,7 +639,7 @@ class Code_interpreter(OpenAISchema):
         None, description="Error message if the code is not correct."
     )
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 76
+# %% ../../nbs/01_Databricks_text2sql.ipynb 75
 def write_sql(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -660,7 +660,7 @@ def write_sql(
     print(code)
     return {"code": code, 'history': [HMessage(content=code)]}    
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 79
+# %% ../../nbs/01_Databricks_text2sql.ipynb 78
 def write_pandas(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -697,7 +697,7 @@ def write_pandas(
     )
     return {"python": data.model_dump(), 'history': [HMessage(content=data.code)]}
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 81
+# %% ../../nbs/01_Databricks_text2sql.ipynb 80
 class FinalAnswer(OpenAISchema):
     """The final answer to the user"""
 
@@ -706,7 +706,7 @@ class FinalAnswer(OpenAISchema):
         description="A detailed and explanatory final answer based on the question and the data.",
     )
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 83
+# %% ../../nbs/01_Databricks_text2sql.ipynb 82
 def final_answer(
         state: State # state of the graph
         ) -> State: # dictionary with the state of the message
@@ -743,7 +743,7 @@ def final_answer(
     print(message)
     return state
 
-# %% ../../nbs/01_Databricks_text2sql.ipynb 87
+# %% ../../nbs/01_Databricks_text2sql.ipynb 86
 graph = StateGraph(State)
 tools = [
     "get_tables",
