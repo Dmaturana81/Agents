@@ -19,9 +19,19 @@ python-dotenv = "*"
 langchain-experimental = "*"
 plotly = "*"
 databricks-sql-connector = "*"
+parler-tts = {git = "git+https://github.com/huggingface/parler-tts.git"}
+torch = "*"
+torchaudio = "*"
+flash-attention = "*"
+sentence-transformers = "*"
+groq = "*"
+pydub = "*"
 
 [dev-packages]
 nbformat = "*"
 
 [requires]
 python_version = "3.12"
+
+[pipenv]
+allow_prereleases = true
