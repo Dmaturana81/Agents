@@ -18,6 +18,9 @@ from typing import Literal, Any
 
 
 # %% ../../nbs/08_clients.ipynb 4
+genai.configure(api_key=os.environ['GEMINI_API_KEY'])
+
+# %% ../../nbs/08_clients.ipynb 5
 class BaseClient(BaseModel):
     model: str
     client: Any
