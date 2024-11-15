@@ -5,10 +5,10 @@
 # %% auto 0
 __all__ = ['SYS_WRITER', 'SYS_REWRITER', 'validate_pdf', 'PDFProcessor', 'PodcastWriter', 'numpy_to_audio_segment']
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 4
+# %% ../../nbs/09_NotebookPodcast.ipynb 5
 from fastcore.utils import Path, patch
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 9
+# %% ../../nbs/09_NotebookPodcast.ipynb 10
 from unstructured.partition.pdf import partition_pdf
 
 from langchain.text_splitter import  SentenceTransformersTokenTextSplitter
@@ -19,7 +19,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 10
+# %% ../../nbs/09_NotebookPodcast.ipynb 11
 def validate_pdf(file_path: str | Path  ) -> bool:
     """Validate if the file exists and is a PDF
 
@@ -38,7 +38,7 @@ def validate_pdf(file_path: str | Path  ) -> bool:
         return False
     return True
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 11
+# %% ../../nbs/09_NotebookPodcast.ipynb 12
 class PDFProcessor:
     """Class to handle PDF processing including text extraction and chunking"""
     chunked_docs: dict[str, list[str]] = {}
@@ -156,7 +156,7 @@ Here is the text:
         return self.cleanned_text
     
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 12
+# %% ../../nbs/09_NotebookPodcast.ipynb 13
 @patch
 def process_chunks(self:PDFProcessor, files: list[str] | None = None):
     """Process a chunk of text and return both input and output for verification"""
@@ -182,7 +182,7 @@ def process_chunks(self:PDFProcessor, files: list[str] | None = None):
 
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 30
+# %% ../../nbs/09_NotebookPodcast.ipynb 31
 SYS_WRITER = """
 You are the a world-class podcast writer, you have worked as a ghost writer for Joe Rogan, Lex Fridman, Ben Shapiro, Tim Ferris. 
 We are in an alternate universe where actually you have been writing every line they say and they just stream it into their brains.
@@ -208,7 +208,7 @@ The following rules are very important:
 - THE PODCAST DURATION IS 30 MINUTES
 """
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 31
+# %% ../../nbs/09_NotebookPodcast.ipynb 32
 SYS_REWRITER = """
 You are an international oscar winning screenwriter with a lot of experience to produce 30 minute long podcasts.
 You have been working with multiple award winning podcast creators and gain incredible experience in writing for them.
@@ -247,7 +247,7 @@ Example of response:
 ]
 """
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 32
+# %% ../../nbs/09_NotebookPodcast.ipynb 33
 class PodcastWriter:
     SYS_WRITER: str = SYS_WRITER
     SYS_REWRITER: str = SYS_REWRITER
@@ -269,7 +269,7 @@ class PodcastWriter:
         self.model_small = model_small
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 33
+# %% ../../nbs/09_NotebookPodcast.ipynb 34
 @patch
 def generate_podcast(self:PodcastWriter):
     text = self.processor.cleanned_text
@@ -286,11 +286,11 @@ def generate_podcast(self:PodcastWriter):
     )
     self.podcast_text = outputs.choices[0].message.content
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 41
+# %% ../../nbs/09_NotebookPodcast.ipynb 42
 from ast import literal_eval
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 42
+# %% ../../nbs/09_NotebookPodcast.ipynb 43
 @patch
 def rewrite_podcast(self:PodcastWriter):
     text = self.podcast_text
@@ -308,12 +308,12 @@ def rewrite_podcast(self:PodcastWriter):
     return self.rewritten_podcast
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 46
+# %% ../../nbs/09_NotebookPodcast.ipynb 47
 from IPython.display import Audio
 import IPython.display as ipd
 from tqdm import tqdm
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 47
+# %% ../../nbs/09_NotebookPodcast.ipynb 48
 import os
 os.environ["SUNO_OFFLOAD_CPU"] = "True"
 os.environ["SUNO_USE_SMALL_MODELS"] = "True"
@@ -321,23 +321,23 @@ os.environ["SUNO_ENABLE_MPS"] = "True"
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"]="1"
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 48
+# %% ../../nbs/09_NotebookPodcast.ipynb 49
 from transformers import BarkModel, AutoProcessor, AutoTokenizer
 import torch
 import numpy as np
 from parler_tts import ParlerTTSForConditionalGeneration
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 64
+# %% ../../nbs/09_NotebookPodcast.ipynb 65
 from scipy.io import wavfile
 from pydub import AudioSegment
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 66
+# %% ../../nbs/09_NotebookPodcast.ipynb 67
 import io
 
 
 
-# %% ../../nbs/09_NotebookPodcast.ipynb 67
+# %% ../../nbs/09_NotebookPodcast.ipynb 68
 def numpy_to_audio_segment(audio_arr, sampling_rate):
     """Convert numpy array to AudioSegment"""
     # Convert to 16-bit PCM
